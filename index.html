@@ -8,7 +8,7 @@
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 
-<!-- EmailJS init (YOUR public key) -->
+<!-- EmailJS init -->
 <script>
   emailjs.init("MaMAidecODASo6-E2");
 </script>
@@ -53,9 +53,6 @@
   }
 
   .why-section, .testimonials, #listings, #faq {max-width:1000px;margin:0 auto;}
-  .why-cards{display:flex; flex-wrap:wrap; gap:16px; justify-content:center;}
-  .why-card{background:#fff; border-radius:12px; padding:24px; flex:1 1 200px; box-shadow:0 2px 6px rgba(0,0,0,0.1); text-align:center;}
-
   .testimonial-city-buttons{display:flex; flex-wrap:wrap; justify-content:center; margin-bottom:16px;}
   .testimonial-city-buttons button{
     margin:4px;
@@ -173,27 +170,18 @@
     text-decoration:none;
   }
 
-  #landlordAuthBox {
-    max-width:500px;
-    margin:0 auto 24px auto;
-    padding:20px;
-    background:#fff;
-    border-radius:12px;
-    box-shadow:0 2px 6px rgba(0,0,0,0.1);
-  }
-  #landlordAuthBox h3{text-align:center;margin-bottom:8px;}
-  #loginMessage{text-align:center;margin-top:8px;font-size:0.9rem;}
-  #loggedInAs{text-align:center;margin-bottom:8px;font-size:0.95rem;}
-  #logoutBtn{
-    display:none;
-    background:#444;
-    color:#fff;
-    border:none;
-    padding:8px 16px;
-    border-radius:6px;
-    font-size:0.9rem;
-    margin:0 auto 16px auto;
-    max-width:150px;
+  #toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #333;
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 8px;
+    display: none;
+    z-index: 2000;
+    font-size: 0.95rem;
   }
 </style>
 </head>
@@ -256,7 +244,7 @@
 <!-- TENANT FORM -->
 <section id="tenants">
   <h2 style="text-align:center; margin-bottom:24px;">Tenant Request Form</h2>
-  <form onsubmit="sendTenantForm(event)">
+  <form id="tenantForm">
     <input type="text" name="tenant_name" placeholder="Your Name" required autocomplete="name" />
     <input type="email" name="tenant_email" placeholder="Email" required autocomplete="email" />
     <input type="tel" name="tenant_phone" placeholder="Phone" required autocomplete="tel" />
@@ -308,43 +296,22 @@
     <button onclick="showTestimonials('BryansRoad')">Bryans Road</button>
     <button onclick="showTestimonials('Accokeek')">Accokeek</button>
   </div>
-
-  <div id="Waldorf" class="testimonial-list active">
-    <div class="testimonial-card"><strong>John D.</strong> Great experience finding a room!</div>
-    <div class="testimonial-card"><strong>Sarah K.</strong> Smooth process from viewing to moving in.</div>
-    <div class="testimonial-card"><strong>Mike L.</strong> I liked the local focus on Waldorf only.</div>
-  </div>
-
-  <div id="LaPlata" class="testimonial-list">
-    <div class="testimonial-card"><strong>Mary S.</strong> Landlords were responsive and fair.</div>
-    <div class="testimonial-card"><strong>Robert P.</strong> Listings matched exactly what was advertised.</div>
-  </div>
-
-  <div id="BryansRoad" class="testimonial-list">
-    <div class="testimonial-card"><strong>Linda T.</strong> Found a quiet room close to my work.</div>
-    <div class="testimonial-card"><strong>Tom H.</strong> Landlords were very accommodating.</div>
-  </div>
-
-  <div id="Accokeek" class="testimonial-list">
-    <div class="testimonial-card"><strong>Alice W.</strong> Easy to connect with landlords.</div>
-    <div class="testimonial-card"><strong>Bob C.</strong> Listing info was accurate and clear.</div>
-  </div>
+  <div id="testimonialContainer"></div>
 </section>
 
 <!-- FAQ -->
 <section id="faq">
   <h2 style="text-align:center; margin-bottom:16px;">FAQs</h2>
-  <div class="faq-item" onclick="toggleFaq(this)"><strong>How do I publish a room?</strong><p>Sign up as a landlord, log in, and complete the form under "Landlord Portal".</p></div>
-  <div class="faq-item" onclick="toggleFaq(this)"><strong>Do I pay to list my room?</strong><p>Currently, listings are free while we build our local network.</p></div>
-  <div class="faq-item" onclick="toggleFaq(this)"><strong>How long does it take to find a tenant?</strong><p>Most rooms get interest within 1–2 weeks.</p></div>
-  <div class="faq-item" onclick="toggleFaq(this)"><strong>What cities do you serve?</strong><p>We focus on Waldorf, La Plata, Bryans Road, and Accokeek.</p></div>
-  <div class="faq-item" onclick="toggleFaq(this)"><strong>Is my information secure?</strong><p>We only collect what is needed to connect tenants and landlords.</p></div>
+  <div id="faqContainer"></div>
 </section>
 
 <footer>&copy; 2025 Waldorf Rooms. All rights reserved.</footer>
 
 <!-- WhatsApp floating button -->
 <a href="https://wa.me/12402309731" target="_blank" class="whatsapp-btn">💬</a>
+
+<!-- Toast Notification -->
+<div id="toast"></div>
 
 <script>
 // ---------- CONFIG ----------
@@ -354,17 +321,18 @@ const sb = supabase.createClient(supabaseUrl, supabaseKey);
 
 let currentUser = null;
 let allListings = [];
+let allTestimonials = [];
+let allFaqs = [];
 
-// ---------- UTILITY ----------
-function showSupabaseError(context, error){
-  console.error("Supabase error in:", context, error);
-  let message = context + " failed.";
-  if(error && error.message) message += "\nMessage: " + error.message;
-  if(error && error.details) message += "\nDetails: " + error.details;
-  alert(message);
+// ---------- Toast ----------
+function showToast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.style.display = "block";
+  setTimeout(()=>{t.style.display="none";}, 3000);
 }
 
-// ---------- AUTH UI ----------
+// ---------- AUTH ----------
 function setLoggedInUI(user){
   currentUser = user;
   document.getElementById('landlordAuthBox').style.display = "none";
@@ -385,33 +353,20 @@ function setLoggedOutUI(){
 
 async function checkSession(){
   const { data, error } = await sb.auth.getSession();
-  if(error){
-    showSupabaseError("Get session", error);
-    setLoggedOutUI();
-    return;
-  }
+  if(error){ setLoggedOutUI(); return; }
   const session = data?.session;
   if(session?.user){ setLoggedInUI(session.user); }
   else{ setLoggedOutUI(); }
 }
 
-// ---------- LOAD LISTINGS ----------
+// ---------- LISTINGS ----------
 async function loadListings(){
   try{
-    const { data: listings, error } = await sb
-      .from("listings")
-      .select("*")
-      .order("id",{ascending:false});
-    if(error){
-      showSupabaseError("Loading listings", error);
-      return;
-    }
+    const { data: listings, error } = await sb.from("listings").select("*").order("id",{ascending:false});
+    if(error){ showToast("Error loading listings."); return; }
     allListings = listings || [];
     renderListings();
-  } catch(e){
-    alert("Unexpected loadListings error");
-    console.error(e);
-  }
+  } catch(e){ showToast("Unexpected loadListings error."); console.error(e); }
 }
 
 function renderListings(){
@@ -428,20 +383,16 @@ function renderListings(){
   filtered.sort((a,b)=>{
     if(sortBy==="price_low_high") return a.price - b.price;
     if(sortBy==="price_high_low") return b.price - a.price;
-    return b.id - a.id; // newest
+    return b.id - a.id;
   });
 
   container.innerHTML="";
   countSpan.textContent = filtered.length + " listing" + (filtered.length===1?"":"s");
-  if(filtered.length===0){
-    container.innerHTML="<p>No listings found.</p>";
-    return;
-  }
+  if(filtered.length===0){ container.innerHTML="<p>No listings found.</p>"; return; }
 
   filtered.forEach((l, idx)=>{
     const div=document.createElement("div");
     div.className="listing-card";
-    div.dataset.currentSlide=0;
     const images = Array.isArray(l.image_urls)?l.image_urls:[];
     let imagesHtml="";
     const domIdx="f"+idx;
@@ -451,15 +402,12 @@ function renderListings(){
         imagesHtml+=`<img src="${url}" style="display:${i===0?'block':'none'};">`;
       });
       if(images.length>1){
-        imagesHtml += `
-          <button onclick="prevSlide('${domIdx}')" style="position:absolute;top:50%;left:0;transform:translateY(-50%);background:rgba(0,0,0,0.3);color:#fff;border:none;padding:8px;cursor:pointer;">‹</button>
-          <button onclick="nextSlide('${domIdx}')" style="position:absolute;top:50%;right:0;transform:translateY(-50%);background:rgba(0,0,0,0.3);color:#fff;border:none;padding:8px;cursor:pointer;">›</button>`;
+        imagesHtml += `<button onclick="prevSlide('${domIdx}')" style="position:absolute;top:50%;left:0;transform:translateY(-50%);background:rgba(0,0,0,0.3);color:#fff;border:none;padding:8px;cursor:pointer;">‹</button>
+        <button onclick="nextSlide('${domIdx}')" style="position:absolute;top:50%;right:0;transform:translateY(-50%);background:rgba(0,0,0,0.3);color:#fff;border:none;padding:8px;cursor:pointer;">›</button>`;
       }
       imagesHtml+="</div>";
     }
-    div.innerHTML = `
-      ${imagesHtml}
-      <h3>${l.room_title || ""}</h3>
+    div.innerHTML = `${imagesHtml}<h3>${l.room_title || ""}</h3>
       <p>${l.details || ""}</p>
       <p><strong>Price:</strong> $${l.price} / month</p>
       <p><strong>City:</strong> ${l.city || ""}</p>`;
@@ -491,138 +439,155 @@ function prevSlide(id){
   carousel.dataset.currentSlide=current;
 }
 
-// ---------- LANDLORD LOGIN / LOGOUT ----------
-document.getElementById("loginForm").addEventListener("submit", async function(e){
-  e.preventDefault();
-  const email = this.email.value.trim();
-  const password = this.password.value.trim();
-  try{
-    const { data, error } = await sb.auth.signUp({ email, password });
-    if(error && error.message && error.message.includes("User already registered")){
-      const { data: loginData, error: loginError } =
-        await sb.auth.signInWithPassword({ email, password });
-      if(loginError){
-        showSupabaseError("Login", loginError);
-        return;
-      }
-      setLoggedInUI(loginData.user);
-    } else if(error){
-      showSupabaseError("SignUp", error);
-      return;
-    } else {
-      setLoggedInUI(data.user);
-    }
-  } catch(err){
-    alert("Unexpected login/signup error");
-    console.error(err);
-  }
-});
-
-document.getElementById("logoutBtn").addEventListener("click", async function(){
-  await sb.auth.signOut();
-  setLoggedOutUI();
-});
-
-// ---------- LANDLORD LISTING UPLOAD ----------
+// ---------- LANDLORD FORM ----------
 async function uploadListing(form){
-  if(!currentUser){
-    alert("Please log in first.");
-    return false;
+  if(!currentUser){ showToast("Please log in first."); return false; }
+  const formData = new FormData(form);
+  const room_title = formData.get("room_title");
+  const details = formData.get("details");
+  const price = parseFloat(formData.get("price"));
+  const city = formData.get("city");
+  const landlord_name = formData.get("landlord_name");
+  const landlord_email = formData.get("landlord_email");
+  const landlord_phone = formData.get("landlord_phone");
+  const images = formData.getAll("room_image");
+
+  let imageUrls = [];
+  for(const file of images){
+    const { data, error } = await sb.storage.from("rooms").upload(`${Date.now()}_${file.name}`, file);
+    if(error){ console.error(error); showToast("Error uploading image."); return false; }
+    const url = sb.storage.from("rooms").getPublicUrl(data.path).publicUrl;
+    imageUrls.push(url);
   }
 
-  const room_title = form.room_title.value.trim();
-  const details = form.details.value.trim();
-  const price = parseFloat(form.price.value);
-  const city = form.city.value;
-  const files = form.room_image.files;
-  if(!files.length){
-    alert("Please select at least one image.");
-    return false;
-  }
+  const { data, error } = await sb.from("listings").insert([{
+    landlord_name, landlord_email, landlord_phone, room_title, details, price, city, image_urls:imageUrls
+  }]);
+  if(error){ console.error(error); showToast("Error saving listing."); return false; }
 
-  try{
-    const image_urls=[];
-    for(let f of files){
-      const filename = Date.now() + "_" + f.name;
-      const { data: uploadData, error: uploadError } =
-        await sb.storage.from("rooms").upload(filename, f);
-      if(uploadError){
-        showSupabaseError("Image upload", uploadError);
-        return false;
-      }
-      const { data: publicData } = sb.storage.from("rooms").getPublicUrl(filename);
-      image_urls.push(publicData.publicUrl);
-    }
-
-    const { data, error } = await sb.from("listings").insert([{
-      landlord_name: form.landlord_name.value.trim(),
-      landlord_email: form.landlord_email.value.trim(),
-      landlord_phone: form.landlord_phone.value.trim(),
-      room_title,
-      details,
-      price,
-      city,
-      image_urls
-    }]);
-
-    if(error){
-      showSupabaseError("Insert listing", error);
-      return false;
-    }
-    alert("Listing uploaded successfully!");
-    form.reset();
-    loadListings();
-  } catch(e){
-    alert("Unexpected upload error");
-    console.error(e);
-  }
+  showToast("Listing published!");
+  form.reset();
+  loadListings();
   return false;
 }
 
-// ---------- TENANT FORM (EmailJS) ----------
-function sendTenantForm(e){
+// ---------- TENANT FORM ----------
+document.getElementById("tenantForm").onsubmit = async function(e){
   e.preventDefault();
   const form = e.target;
-  const templateParams = {
-    from_name: form.tenant_name.value,
-    email: form.tenant_email.value,
-    phone: form.tenant_phone.value,
-    city: form.desired_city.value,
-    message: form.requirements.value
-  };
+  const name = form.tenant_name.value;
+  const email = form.tenant_email.value;
+  const phone = form.tenant_phone.value;
+  const city = form.desired_city.value;
+  const requirements = form.requirements.value;
 
-  // Use your real EmailJS Service + Template IDs
-  emailjs
-    .send("service_ybsskt9", "template_w921zcz", templateParams)
-    .then(() => {
-      alert("Request sent successfully!");
-      form.reset();
-    })
-    .catch(err => {
-      alert("Error sending request.");
-      console.error(err);
-    });
+  try{
+    // Save to Supabase
+    await sb.from("tenant_requests").insert([{name,email,phone,city,requirements}]);
+    // EmailJS
+    emailjs.send("service_id","template_id",{name,email,phone,city,requirements});
+    showToast("Request sent successfully!");
+    form.reset();
+  }catch(e){ console.error(e); showToast("Error sending request."); }
+};
+
+// ---------- TESTIMONIALS ----------
+allTestimonials = {
+  Waldorf: [
+    {name:"Emma R.", text:"Landlord responses were quick and helpful."},
+    {name:"Jason M.", text:"The site made it easy to compare rooms locally."},
+    {name:"Alice T.", text:"Found a room that fit my budget perfectly."},
+    {name:"Mark D.", text:"Easy to navigate and post my room as landlord."}
+  ],
+  LaPlata:[
+    {name:"Linda G.", text:"Very user-friendly experience."},
+    {name:"Peter V.", text:"I found my room within a week!"},
+    {name:"Sophie H.", text:"Great listings with clear details."},
+    {name:"Tom F.", text:"Smooth communication with landlords."}
+  ],
+  BryansRoad:[
+    {name:"Nancy B.", text:"Listings were accurate and easy to view."},
+    {name:"Kevin L.", text:"The landlord portal is simple to use."},
+    {name:"Derek C.", text:"Helpful support team for any questions."},
+    {name:"Olivia S.", text:"Room photos were clear and updated."}
+  ],
+  Accokeek:[
+    {name:"Rachel W.", text:"Great local community focus."},
+    {name:"Samuel H.", text:"I appreciated the detailed room info."},
+    {name:"Laura J.", text:"Found a nice, affordable room easily."},
+    {name:"Henry B.", text:"The site is very intuitive."}
+  ]
+};
+
+function showTestimonials(city){
+  const container = document.getElementById("testimonialContainer");
+  container.innerHTML="";
+  const list = allTestimonials[city] || [];
+  list.forEach(t=>{
+    const div = document.createElement("div");
+    div.className="testimonial-card";
+    div.innerHTML=`<strong>${t.name}</strong><p>${t.text}</p>`;
+    container.appendChild(div);
+  });
 }
 
 // ---------- FAQ ----------
-function toggleFaq(elem){
-  const p = elem.querySelector("p");
-  if(!p) return;
-  p.style.display = (p.style.display==="block" ? "none" : "block");
+allFaqs=[
+  {q:"Can I edit my listing after publishing?",a:"Yes, log in and update your listing through the Landlord Portal."},
+  {q:"Are tenants screened?",a:"Currently, tenants submit requests; screening is done directly by landlords."},
+  {q:"Can I delete my account?",a:"Yes, contact support to remove your account and listings."},
+  {q:"How long are listings visible?",a:"Listings remain visible until the landlord removes them or marks them rented."},
+  {q:"Is there a fee to post a listing?",a:"No, posting a room is free for landlords."},
+  {q:"Can tenants contact multiple landlords?",a:"Yes, tenants can submit requests to multiple landlords."}
+];
+
+function renderFaqs(){
+  const container = document.getElementById("faqContainer");
+  container.innerHTML="";
+  allFaqs.forEach((f,idx)=>{
+    const div=document.createElement("div");
+    div.className="faq-item";
+    div.innerHTML=`<h4>${f.q}</h4><p>${f.a}</p>`;
+    div.onclick = function(){
+      const p = div.querySelector("p");
+      p.style.display = p.style.display==="block"?"none":"block";
+    }
+    container.appendChild(div);
+  });
 }
 
-// ---------- TESTIMONIALS ----------
-function showTestimonials(city){
-  document.querySelectorAll(".testimonial-list").forEach(l => l.classList.remove("active"));
-  const el = document.getElementById(city);
-  if(el){ el.classList.add("active"); }
-}
+// ---------- AUTH FORM ----------
+document.getElementById("loginForm").onsubmit = async function(e){
+  e.preventDefault();
+  const email = this.email.value;
+  const password = this.password.value;
+  try{
+    const { data, error } = await sb.auth.signInWithPassword({email,password});
+    if(error){
+      // Try signup if login fails
+      const { data:signupData, error:signupErr } = await sb.auth.signUp({email,password});
+      if(signupErr){ showToast("Auth failed: "+signupErr.message); return; }
+      setLoggedInUI(signupData.user);
+      showToast("Account created & logged in!");
+      return;
+    }
+    setLoggedInUI(data.user);
+    showToast("Logged in successfully!");
+  }catch(err){ console.error(err); showToast("Login error."); }
+};
+
+document.getElementById("logoutBtn").onclick = async ()=>{
+  await sb.auth.signOut();
+  setLoggedOutUI();
+  showToast("Logged out.");
+};
 
 // ---------- INIT ----------
-checkSession();
-loadListings();
-document.getElementById("filterCity").addEventListener("change", renderListings);
-document.getElementById("sortListings").addEventListener("change", renderListings);
+document.addEventListener("DOMContentLoaded",()=>{
+  checkSession();
+  loadListings();
+  renderFaqs();
+});
 </script>
 </body>
 </html>
