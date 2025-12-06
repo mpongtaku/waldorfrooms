@@ -7,194 +7,70 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-
-<!-- EmailJS init -->
 <script>
-  emailjs.init("MaMAidecODASo6-E2");
+  emailjs.init("MaMAidecODASo6-E2"); // EmailJS public key
 </script>
-
 <style>
-  body { font-family: 'Inter', sans-serif; margin:0; padding:0; background:#f9f9f9; color:#333; }
-  h1,h2,h3,h4,h5,h6 { margin:0; font-weight:600; }
-  a{text-decoration:none; color:inherit;}
-  button{font-weight:bold; cursor:pointer;}
-
-  header{
-    background:#fff;
-    border-bottom:1px solid #ddd;
-    padding:12px 24px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    position:sticky;
-    top:0;
-    z-index:1000;
-  }
-  header .logo{font-size:1.5rem; font-weight:700; color:#ff6b6b;}
-  nav a{margin-left:16px; font-weight:500; color:#333;}
-
-  section {padding:40px 20px;}
-
-  .hero{
-    background:#ffe6e1;
-    text-align:center;
-    padding:60px 20px;
-  }
-  .hero h1{font-size:2.5rem;margin-bottom:16px;}
-  .hero p{font-size:1.2rem;margin-bottom:24px;}
-  .hero button{
-    background:#ff6b6b;
-    color:#fff;
-    border:none;
-    padding:12px 24px;
-    margin:8px;
-    border-radius:8px;
-    font-size:1rem;
-  }
-
-  .why-section, .testimonials, #listings, #faq {max-width:1000px;margin:0 auto;}
-  .testimonial-city-buttons{display:flex; flex-wrap:wrap; justify-content:center; margin-bottom:16px;}
-  .testimonial-city-buttons button{
-    margin:4px;
-    background:#ff6b6b;
-    color:#fff;
-    border:none;
-    padding:8px 16px;
-    border-radius:6px;
-    cursor:pointer;
-  }
-  .testimonial-list{display:none;}
-  .testimonial-list.active{display:block;}
-  .testimonial-card{
-    background:#fff;
-    padding:16px;
-    border-radius:8px;
-    margin-bottom:12px;
-    box-shadow:0 1px 4px rgba(0,0,0,0.1);
-  }
-  .testimonial-card strong{display:block;margin-bottom:4px;}
-
-  form{
-    background:#fff;
-    padding:20px;
-    border-radius:12px;
-    margin-bottom:40px;
-    box-shadow:0 2px 6px rgba(0,0,0,0.1);
-    max-width:500px;
-    margin-left:auto;
-    margin-right:auto;
-  }
-  form input, form select, form textarea{
-    width:100%;
-    padding:10px;
-    margin-bottom:12px;
-    border-radius:8px;
-    border:1px solid #ccc;
-    font-size:1rem;
-  }
-  form button{
-    background:#ff6b6b;
-    color:#fff;
-    border:none;
-    padding:12px;
-    border-radius:8px;
-    font-size:1rem;
-    width:100%;
-  }
-
-  .listing-card{
-    background:#fff;
-    padding:16px;
-    border-radius:12px;
-    margin-bottom:16px;
-    box-shadow:0 1px 4px rgba(0,0,0,0.1);
-  }
-  .listing-card img{max-width:100%; border-radius:8px; margin-bottom:8px;}
-  .carousel img{width:100%; display:block;}
-
-  .listings-controls{
-    display:flex;
-    flex-wrap:wrap;
-    gap:12px;
-    align-items:center;
-    justify-content:space-between;
-    margin-bottom:16px;
-    font-size:0.95rem;
-  }
-  .listings-controls .filters{
-    display:flex;
-    flex-wrap:wrap;
-    gap:8px;
-    align-items:center;
-  }
-  .listings-controls select{
-    padding:6px 10px;
-    border-radius:6px;
-    border:1px solid #ccc;
-    font-size:0.95rem;
-    background:#fff;
-  }
-  .listings-info{font-size:0.9rem; color:#555;}
-
-  .faq{max-width:800px; margin:0 auto 60px auto;}
-  .faq-item{
-    background:#fff;
-    padding:16px;
-    margin-bottom:8px;
-    border-radius:8px;
-    cursor:pointer;
-  }
-  .faq-item p{display:none;margin-top:8px;}
-
-  footer{
-    background:#333;
-    color:#fff;
-    text-align:center;
-    padding:24px 20px;
-  }
-
-  .whatsapp-btn{
-    position:fixed;
-    bottom:24px;
-    right:24px;
-    background:#25D366;
-    color:#fff;
-    border-radius:50%;
-    width:60px;
-    height:60px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:32px;
-    z-index:1000;
-    text-decoration:none;
-  }
-
-  #toast {
-    position: fixed;
-    bottom: 24px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #333;
-    color: #fff;
-    padding: 12px 24px;
-    border-radius: 8px;
-    display: none;
-    z-index: 2000;
-    font-size: 0.95rem;
-  }
+/* --- GLOBAL STYLES --- */
+body { font-family: 'Inter', sans-serif; margin:0; padding:0; background:#f4f4f9; color:#333; }
+h1,h2,h3,h4,h5,h6 { margin:0; font-weight:600; }
+a{text-decoration:none; color:inherit;}
+button{font-weight:bold; cursor:pointer;}
+header{background:#fff;border-bottom:1px solid #ddd;padding:12px 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1000; box-shadow:0 2px 4px rgba(0,0,0,0.05);}
+header .logo{font-size:1.5rem; font-weight:700; color:#2a2a72;}
+nav a{margin-left:16px; font-weight:500; color:#333; cursor:pointer; transition:0.2s;}
+nav a:hover{color:#2a2a72;}
+section {padding:60px 20px; max-width:1100px; margin:auto;}
+.hero{background:#2a2a72;color:#fff;text-align:center;padding:80px 20px;border-radius:12px;margin-bottom:40px;}
+.hero h1{font-size:2.5rem;margin-bottom:16px;line-height:1.2;}
+.hero p{font-size:1.2rem;margin-bottom:24px;}
+.hero button{background:#ff6b6b;color:#fff;border:none;padding:14px 28px;margin:8px;border-radius:8px;font-size:1rem; transition:0.2s;}
+.hero button:hover{background:#e45555;}
+.why-section{display:flex;flex-wrap:wrap;justify-content:space-between;gap:20px;margin-bottom:40px;}
+.why-box{background:#fff;padding:24px;border-radius:12px;box-shadow:0 2px 6px rgba(0,0,0,0.1);flex:1 1 48%;cursor:pointer;transition:0.2s;}
+.why-box:hover{transform:translateY(-5px);}
+.why-box h3{text-align:center;margin-bottom:16px;color:#2a2a72;}
+.why-content{display:none; font-size:1rem; line-height:1.6;}
+.why-box.active .why-content{display:block;}
+form{background:#fff;padding:24px;border-radius:12px;margin-bottom:40px;box-shadow:0 2px 6px rgba(0,0,0,0.1); max-width:600px; margin-left:auto;margin-right:auto;}
+form input, form select, form textarea{width:100%;padding:12px;margin-bottom:16px;border-radius:8px;border:1px solid #ccc;font-size:1rem;}
+form button{background:#2a2a72;color:#fff;border:none;padding:14px;border-radius:8px;font-size:1rem;width:100%; transition:0.2s;}
+form button:hover{background:#1f1f5c;}
+.listing-card{background:#fff;padding:20px;border-radius:12px;margin-bottom:20px;box-shadow:0 2px 6px rgba(0,0,0,0.1); display:flex;flex-direction:column;gap:8px;}
+.listing-card img{max-width:100%; border-radius:8px; object-fit:cover;}
+.listings-controls{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-bottom:20px;font-size:0.95rem;}
+.listings-controls .filters{display:flex;flex-wrap:wrap;gap:12px;align-items:center;}
+.listings-info{font-size:0.95rem; color:#555;}
+.testimonial-card{background:#fff;padding:16px;border-radius:12px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,0.1);}
+.testimonial-card strong{color:#2a2a72;}
+.faq-item{background:#fff;padding:16px;border-radius:12px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,0.1); cursor:pointer;}
+.faq-item.active{background:#2a2a72;color:#fff;}
+.faq-item p{margin-top:8px; display:none;}
+.faq-item.active p{display:block;}
+footer{background:#2a2a72;color:#fff;text-align:center;padding:24px 20px; border-radius:12px; margin-top:40px;}
+.whatsapp-btn{position:fixed;bottom:24px;right:24px;background:#25D366;color:#fff;border-radius:50%;width:60px;height:60px;display:flex;align-items:center;justify-content:center;font-size:32px;z-index:1000;text-decoration:none;}
+#toast {position: fixed;bottom: 24px;left: 50%;transform: translateX(-50%);background: #333;color: #fff;padding: 12px 24px;border-radius: 8px;display: none;z-index: 2000;font-size: 0.95rem;}
+.tabcontent{display:none;}
+#adminContent table{width:100%; border-collapse:collapse; margin-bottom:20px;}
+#adminContent th, #adminContent td{border:1px solid #ccc; padding:8px; text-align:left;}
+#adminContent th{background:#f5f5f5;}
+#adminContent button{background:#ff6b6b;color:#fff;border:none;padding:6px 12px;border-radius:6px;cursor:pointer; transition:0.2s;}
+#adminContent button:hover{background:#e45555;}
 </style>
 </head>
 <body>
+
 <header>
   <div class="logo">Waldorf Rooms</div>
   <nav>
-    <a href="#home">Home</a>
-    <a href="#tenants">Tenants</a>
-    <a href="#landlords">Landlords</a>
-    <a href="#listings">Available Listings</a>
-    <a href="#testimonials">Testimonials</a>
-    <a href="#faq">FAQs</a>
+    <a onclick="scrollToSection('home')">Home</a>
+    <a onclick="scrollToSection('tenants')">Tenants</a>
+    <a onclick="scrollToSection('landlords')">Landlords</a>
+    <a onclick="scrollToSection('listings')">Listings</a>
+    <a onclick="scrollToSection('why')">Why</a>
+    <a onclick="scrollToSection('testimonials')">Testimonials</a>
+    <a onclick="scrollToSection('faq')">FAQs</a>
+    <a onclick="openAdminTab()">Admin</a>
   </nav>
 </header>
 
@@ -205,29 +81,51 @@
   <button onclick="window.location='#tenants'">Find a Room</button>
 </section>
 
-<!-- LANDLORD PORTAL -->
+<section id="why">
+  <h2 style="text-align:center;margin-bottom:24px;">Why Choose Waldorf Rooms</h2>
+  <div class="why-section">
+    <div class="why-box" id="tenantWhy">
+      <h3>For Tenants</h3>
+      <div class="why-content">
+        <p>Local rooms, not random listings.</p>
+        <p>Human help available.</p>
+        <p>Safer connections with landlords.</p>
+        <p>Time-saving submission process.</p>
+      </div>
+    </div>
+    <div class="why-box" id="landlordWhy">
+      <h3>For Landlords</h3>
+      <div class="why-content">
+        <p>Reach local tenants quickly.</p>
+        <p>Streamlined listing process.</p>
+        <p>Clear expectations for tenants.</p>
+        <p>Increase visibility and bookings.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="landlords">
-  <h2 style="text-align:center; margin-bottom:24px;">Landlord Portal</h2>
+  <h2 style="text-align:center;margin-bottom:24px;">Landlord Portal</h2>
   <div id="landlordAuthBox">
     <h3>Landlord – Sign Up / Login</h3>
-    <p style="text-align:center; font-size:0.9rem;">Create an account or log in to publish your room listing.</p>
     <form id="loginForm">
-      <input type="email" name="email" placeholder="Email" required autocomplete="email" />
-      <input type="password" name="password" placeholder="Password" required autocomplete="current-password" />
+      <input type="email" name="email" placeholder="Email" required autocomplete="email"/>
+      <input type="password" name="password" placeholder="Password" required autocomplete="current-password"/>
       <button type="submit">Sign Up / Login</button>
     </form>
     <p id="loginMessage"></p>
   </div>
 
   <p id="loggedInAs" style="display:none;"></p>
-  <button id="logoutBtn">Logout</button>
+  <button id="logoutBtn" style="display:none;">Logout</button>
 
   <form id="landlordForm" onsubmit="return uploadListing(this);" style="display:none;">
-    <input type="text" name="landlord_name" placeholder="Your Name" required autocomplete="name" />
-    <input type="email" name="landlord_email" placeholder="Email" required autocomplete="email" />
-    <input type="tel" name="landlord_phone" placeholder="Phone" required autocomplete="tel" />
-    <input type="text" name="room_title" placeholder="Room Title / Type" required autocomplete="off" />
-    <input type="number" name="price" placeholder="Monthly Price" required autocomplete="off" />
+    <input type="text" name="landlord_name" placeholder="Your Name" required autocomplete="name"/>
+    <input type="email" name="landlord_email" placeholder="Email" required autocomplete="email"/>
+    <input type="tel" name="landlord_phone" placeholder="Phone" required autocomplete="tel"/>
+    <input type="text" name="room_title" placeholder="Room Title / Type" required autocomplete="off"/>
+    <input type="number" name="price" placeholder="Monthly Price" required autocomplete="off"/>
     <select name="city" required autocomplete="address-level2">
       <option value="">Select City</option>
       <option value="Waldorf">Waldorf</option>
@@ -236,18 +134,17 @@
       <option value="Accokeek">Accokeek</option>
     </select>
     <textarea name="details" placeholder="Details about the room..." rows="3" required autocomplete="off"></textarea>
-    <input type="file" name="room_image" accept="image/*" multiple required />
+    <input type="file" name="room_image" accept="image/*"/>
     <button type="submit">Publish Listing</button>
   </form>
 </section>
 
-<!-- TENANT FORM -->
 <section id="tenants">
-  <h2 style="text-align:center; margin-bottom:24px;">Tenant Request Form</h2>
+  <h2 style="text-align:center;margin-bottom:24px;">Tenant Request Form</h2>
   <form id="tenantForm">
-    <input type="text" name="tenant_name" placeholder="Your Name" required autocomplete="name" />
-    <input type="email" name="tenant_email" placeholder="Email" required autocomplete="email" />
-    <input type="tel" name="tenant_phone" placeholder="Phone" required autocomplete="tel" />
+    <input type="text" name="tenant_name" placeholder="Your Name" required autocomplete="name"/>
+    <input type="email" name="tenant_email" placeholder="Email" required autocomplete="email"/>
+    <input type="tel" name="tenant_phone" placeholder="Phone" required autocomplete="tel"/>
     <select name="desired_city" required autocomplete="address-level2">
       <option value="">Select City</option>
       <option value="Waldorf">Waldorf</option>
@@ -260,9 +157,8 @@
   </form>
 </section>
 
-<!-- AVAILABLE LISTINGS -->
 <section id="listings">
-  <h2 style="text-align:center; margin-bottom:16px;">Available Listings</h2>
+  <h2 style="text-align:center;margin-bottom:16px;">Available Listings</h2>
   <div class="listings-controls">
     <div class="filters">
       <label>Filter by City:
@@ -287,9 +183,8 @@
   <div id="availableListings"></div>
 </section>
 
-<!-- TESTIMONIALS -->
 <section id="testimonials">
-  <h2 style="text-align:center; margin-bottom:16px;">Testimonials</h2>
+  <h2 style="text-align:center;margin-bottom:16px;">Testimonials</h2>
   <div class="testimonial-city-buttons">
     <button onclick="showTestimonials('Waldorf')">Waldorf</button>
     <button onclick="showTestimonials('LaPlata')">La Plata</button>
@@ -299,295 +194,212 @@
   <div id="testimonialContainer"></div>
 </section>
 
-<!-- FAQ -->
 <section id="faq">
-  <h2 style="text-align:center; margin-bottom:16px;">FAQs</h2>
+  <h2 style="text-align:center;margin-bottom:16px;">FAQs</h2>
   <div id="faqContainer"></div>
 </section>
 
+<section id="admin" class="tabcontent">
+  <h2 style="text-align:center;margin-bottom:16px;">Admin Dashboard</h2>
+  <div id="adminLoginBox">
+    <form id="adminLoginForm">
+      <input type="email" name="email" placeholder="Admin Email" required autocomplete="email"/>
+      <input type="password" name="password" placeholder="Password" required autocomplete="current-password"/>
+      <button type="submit">Login</button>
+    </form>
+  </div>
+  <div id="adminContent" style="display:none;">
+    <button id="adminLogoutBtn">Logout</button>
+    <h3>Listings</h3>
+    <table id="adminListingsTable">
+      <thead>
+        <tr><th>ID</th><th>Title</th><th>City</th><th>Price</th><th>Landlord</th><th>Actions</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <h3>Tenants</h3>
+    <table id="adminTenantsTable">
+      <thead>
+        <tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <h3>Tenant Requests</h3>
+    <table id="adminRequestsTable">
+      <thead>
+        <tr><th>Tenant ID</th><th>City</th><th>Requirements</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</section>
+
 <footer>&copy; 2025 Waldorf Rooms. All rights reserved.</footer>
-
-<!-- WhatsApp floating button -->
-<a href="https://wa.me/12402309731" target="_blank" class="whatsapp-btn">💬</a>
-
-<!-- Toast Notification -->
+<a href="https://wa.me/12402308731" target="_blank" class="whatsapp-btn">💬</a>
 <div id="toast"></div>
 
 <script>
-// ---------- CONFIG ----------
-const supabaseUrl = "https://zufpufhjpjevyfmhhpck.supabase.co";
-const supabaseKey = "sb_publishable_X4Bu7r08t8q4IkGE5q0Cew_D8tRKTNK";
-const sb = supabase.createClient(supabaseUrl, supabaseKey);
+// -------------------- SCROLL --------------------
+function scrollToSection(id){document.getElementById(id).scrollIntoView({behavior:"smooth"}); if(id!=="admin") document.getElementById("admin").style.display="none";}
+function openAdminTab(){document.getElementById("admin").style.display="block"; window.scrollTo({top:0,behavior:"smooth"});}
 
-let currentUser = null;
-let allListings = [];
-let allTestimonials = [];
-let allFaqs = [];
+// -------------------- SUPABASE --------------------
+const SUPABASE_URL = "https://zufpufhjpjevyfmhhpck.supabase.co";
+const SUPABASE_KEY = "sb_publishable_X4Bu7r08t8q4IkGE5q0Cew_D8tRKTNK";
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// ---------- Toast ----------
-function showToast(msg){
-  const t = document.getElementById("toast");
-  t.textContent = msg;
-  t.style.display = "block";
-  setTimeout(()=>{t.style.display="none";}, 3000);
-}
+// -------------------- TOAST --------------------
+function showToast(msg){const t=document.getElementById("toast"); t.textContent=msg; t.style.display="block"; setTimeout(()=>{t.style.display="none";},3000);}
 
-// ---------- AUTH ----------
-function setLoggedInUI(user){
-  currentUser = user;
-  document.getElementById('landlordAuthBox').style.display = "none";
-  document.getElementById('landlordForm').style.display = "block";
-  const loggedIn = document.getElementById('loggedInAs');
-  loggedIn.style.display = "block";
-  loggedIn.textContent = "Logged in as: " + user.email;
-  document.getElementById('logoutBtn').style.display = "block";
-}
+// -------------------- WHY TOGGLE --------------------
+document.querySelectorAll(".why-box").forEach(box=>{box.addEventListener("click",()=>{box.classList.toggle("active");});});
 
-function setLoggedOutUI(){
-  currentUser = null;
-  document.getElementById('landlordAuthBox').style.display = "block";
-  document.getElementById('landlordForm').style.display = "none";
-  document.getElementById('loggedInAs').style.display = "none";
-  document.getElementById('logoutBtn').style.display = "none";
-}
+// -------------------- FAQ --------------------
+const faqData=[
+  {q:"How do I find a room?", a:"Use the Tenant form or browse Listings."},
+  {q:"How do I list my room?", a:"Sign up as a Landlord and submit a listing."},
+  {q:"What cities are covered?", a:"Waldorf, La Plata, Bryans Road, Accokeek."},
+  {q:"Is there a fee to post a listing?", a:"No, posting a listing is free."},
+  {q:"Can I contact landlords directly?", a:"Yes, contact info is provided after login."},
+  {q:"Are rooms verified?", a:"Yes, listings are verified by our team."},
+  {q:"How often is the database updated?", a:"Listings and requests are updated in real-time."},
+  {q:"What if I have a complaint?", a:"Contact support via email or WhatsApp."},
+  {q:"Can I cancel a tenant request?", a:"Yes, go to your dashboard and delete the request."}
+];
+function loadFAQ(){const c=document.getElementById("faqContainer"); c.innerHTML=""; faqData.forEach(f=>{const d=document.createElement("div"); d.className="faq-item"; d.innerHTML=`<strong>${f.q}</strong><p>${f.a}</p>`; d.addEventListener("click",()=>{d.classList.toggle("active");}); c.appendChild(d);});}
+loadFAQ();
 
-async function checkSession(){
-  const { data, error } = await sb.auth.getSession();
-  if(error){ setLoggedOutUI(); return; }
-  const session = data?.session;
-  if(session?.user){ setLoggedInUI(session.user); }
-  else{ setLoggedOutUI(); }
-}
+// -------------------- TESTIMONIALS --------------------
+const testimonialsData={
+  Waldorf:[
+    {name:"Alice",text:"Great experience!"},
+    {name:"John",text:"Friendly landlords."},
+    {name:"Emma",text:"Found a room quickly."},
+    {name:"Mike",text:"Reliable service."},
+    {name:"Lily",text:"Easy to use."},
+    {name:"Tom",text:"Professional team."}
+  ],
+  LaPlata:[
+    {name:"Sarah",text:"Clean and affordable."},
+    {name:"David",text:"Helpful platform."},
+    {name:"Anna",text:"Good communication."},
+    {name:"Chris",text:"Smooth process."},
+    {name:"Olivia",text:"Highly recommended."},
+    {name:"Ben",text:"Fast response."}
+  ],
+  BryansRoad:[
+    {name:"Grace",text:"Loved the room."},
+    {name:"Henry",text:"Friendly staff."},
+    {name:"Sophia",text:"Good pricing."},
+    {name:"Jake",text:"Easy contact."},
+    {name:"Mia",text:"Professional service."},
+    {name:"Ethan",text:"Safe and reliable."}
+  ],
+  Accokeek:[
+    {name:"Isla",text:"Very convenient."},
+    {name:"Liam",text:"Great support."},
+    {name:"Zoe",text:"Rooms are neat."},
+    {name:"Noah",text:"Highly responsive."},
+    {name:"Chloe",text:"Very helpful."},
+    {name:"Lucas",text:"Fast communication."}
+  ]
+};
+function showTestimonials(city){const c=document.getElementById("testimonialContainer"); c.innerHTML=""; (testimonialsData[city]||[]).forEach(t=>{const d=document.createElement("div"); d.className="testimonial-card"; d.innerHTML=`<strong>${t.name}</strong><p>${t.text}</p>`; c.appendChild(d);});}
 
-// ---------- LISTINGS ----------
-async function loadListings(){
-  try{
-    const { data: listings, error } = await sb.from("listings").select("*").order("id",{ascending:false});
-    if(error){ showToast("Error loading listings."); return; }
-    allListings = listings || [];
-    renderListings();
-  } catch(e){ showToast("Unexpected loadListings error."); console.error(e); }
-}
+// -------------------- LANDLORD LOGIN & FORM --------------------
+const loginForm = document.getElementById("loginForm");
+const landlordForm = document.getElementById("landlordForm");
+const loggedInAs = document.getElementById("loggedInAs");
+const logoutBtn = document.getElementById("logoutBtn");
 
-function renderListings(){
-  const container = document.getElementById("availableListings");
-  const countSpan  = document.getElementById("listingsCount");
-  const filterCity = document.getElementById("filterCity").value;
-  const sortBy = document.getElementById("sortListings").value;
+loginForm.addEventListener("submit", async(e)=>{
+  e.preventDefault();
+  const email = loginForm.email.value;
+  const password = loginForm.password.value;
+  const { data, error } = await sb.auth.signInWithPassword({ email, password });
+  if(error){ 
+    const { data: signUpData, error: signUpError } = await sb.auth.signUp({ email, password });
+    if(signUpError){ showToast(signUpError.message); return; }
+    showToast("Account created & logged in."); 
+  }else showToast("Logged in successfully.");
+  landlordForm.style.display="block"; loginForm.style.display="none"; logoutBtn.style.display="block";
+  loggedInAs.style.display="block"; loggedInAs.textContent="Logged in as: "+email;
+});
 
-  let filtered = allListings.slice();
-  if(filterCity !== "all"){
-    filtered = filtered.filter(l => (l.city || "").toLowerCase() === filterCity.toLowerCase());
-  }
+logoutBtn.addEventListener("click", async()=>{
+  await sb.auth.signOut();
+  landlordForm.style.display="none"; loginForm.style.display="block"; logoutBtn.style.display="none";
+  loggedInAs.style.display="none"; showToast("Logged out successfully.");
+});
 
-  filtered.sort((a,b)=>{
-    if(sortBy==="price_low_high") return a.price - b.price;
-    if(sortBy==="price_high_low") return b.price - a.price;
-    return b.id - a.id;
-  });
-
-  container.innerHTML="";
-  countSpan.textContent = filtered.length + " listing" + (filtered.length===1?"":"s");
-  if(filtered.length===0){ container.innerHTML="<p>No listings found.</p>"; return; }
-
-  filtered.forEach((l, idx)=>{
-    const div=document.createElement("div");
-    div.className="listing-card";
-    const images = Array.isArray(l.image_urls)?l.image_urls:[];
-    let imagesHtml="";
-    const domIdx="f"+idx;
-    if(images.length>0){
-      imagesHtml += `<div class="carousel" id="carousel-${domIdx}" style="position:relative; overflow:hidden; border-radius:8px;">`;
-      images.forEach((url,i)=>{
-        imagesHtml+=`<img src="${url}" style="display:${i===0?'block':'none'};">`;
-      });
-      if(images.length>1){
-        imagesHtml += `<button onclick="prevSlide('${domIdx}')" style="position:absolute;top:50%;left:0;transform:translateY(-50%);background:rgba(0,0,0,0.3);color:#fff;border:none;padding:8px;cursor:pointer;">‹</button>
-        <button onclick="nextSlide('${domIdx}')" style="position:absolute;top:50%;right:0;transform:translateY(-50%);background:rgba(0,0,0,0.3);color:#fff;border:none;padding:8px;cursor:pointer;">›</button>`;
-      }
-      imagesHtml+="</div>";
-    }
-    div.innerHTML = `${imagesHtml}<h3>${l.room_title || ""}</h3>
-      <p>${l.details || ""}</p>
-      <p><strong>Price:</strong> $${l.price} / month</p>
-      <p><strong>City:</strong> ${l.city || ""}</p>`;
-    container.appendChild(div);
-  });
-}
-
-function nextSlide(id){
-  const carousel = document.getElementById(`carousel-${id}`);
-  if(!carousel) return;
-  const imgs = carousel.querySelectorAll("img");
-  if(!imgs.length) return;
-  let current = parseInt(carousel.dataset.currentSlide || 0);
-  imgs[current].style.display="none";
-  current = (current+1)%imgs.length;
-  imgs[current].style.display="block";
-  carousel.dataset.currentSlide=current;
-}
-
-function prevSlide(id){
-  const carousel = document.getElementById(`carousel-${id}`);
-  if(!carousel) return;
-  const imgs = carousel.querySelectorAll("img");
-  if(!imgs.length) return;
-  let current = parseInt(carousel.dataset.currentSlide || 0);
-  imgs[current].style.display="none";
-  current = (current-1+imgs.length)%imgs.length;
-  imgs[current].style.display="block";
-  carousel.dataset.currentSlide=current;
-}
-
-// ---------- LANDLORD FORM ----------
 async function uploadListing(form){
-  if(!currentUser){ showToast("Please log in first."); return false; }
   const formData = new FormData(form);
-  const room_title = formData.get("room_title");
-  const details = formData.get("details");
-  const price = parseFloat(formData.get("price"));
-  const city = formData.get("city");
-  const landlord_name = formData.get("landlord_name");
-  const landlord_email = formData.get("landlord_email");
-  const landlord_phone = formData.get("landlord_phone");
-  const images = formData.getAll("room_image");
-
-  let imageUrls = [];
-  for(const file of images){
-    const { data, error } = await sb.storage.from("rooms").upload(`${Date.now()}_${file.name}`, file);
-    if(error){ console.error(error); showToast("Error uploading image."); return false; }
-    const url = sb.storage.from("rooms").getPublicUrl(data.path).publicUrl;
-    imageUrls.push(url);
+  const file = formData.get("room_image");
+  let imageUrl = null;
+  if(file && file.size>0){
+    const { data, error } = await sb.storage.from("rooms").upload(`public/${Date.now()}_${file.name}`, file);
+    if(error) { showToast(error.message); return false; }
+    imageUrl = `${SUPABASE_URL}/storage/v1/object/public/rooms/${data.path}`;
   }
-
   const { data, error } = await sb.from("listings").insert([{
-    landlord_name, landlord_email, landlord_phone, room_title, details, price, city, image_urls:imageUrls
+    landlord_name: formData.get("landlord_name"),
+    landlord_email: formData.get("landlord_email"),
+    landlord_phone: formData.get("landlord_phone"),
+    room_title: formData.get("room_title"),
+    price: formData.get("price"),
+    city: formData.get("city"),
+    details: formData.get("details"),
+    image_url: imageUrl
   }]);
-  if(error){ console.error(error); showToast("Error saving listing."); return false; }
-
-  showToast("Listing published!");
+  if(error){ showToast(error.message); return false; }
+  showToast("Listing published successfully.");
   form.reset();
   loadListings();
   return false;
 }
 
-// ---------- TENANT FORM ----------
-document.getElementById("tenantForm").onsubmit = async function(e){
+// -------------------- TENANT REQUEST FORM --------------------
+const tenantFormEl = document.getElementById("tenantForm");
+tenantFormEl.addEventListener("submit", async(e)=>{
   e.preventDefault();
-  const form = e.target;
-  const name = form.tenant_name.value;
-  const email = form.tenant_email.value;
-  const phone = form.tenant_phone.value;
-  const city = form.desired_city.value;
-  const requirements = form.requirements.value;
-
-  try{
-    // Save to Supabase
-    await sb.from("tenant_requests").insert([{name,email,phone,city,requirements}]);
-    // EmailJS
-    emailjs.send("service_id","template_id",{name,email,phone,city,requirements});
-    showToast("Request sent successfully!");
-    form.reset();
-  }catch(e){ console.error(e); showToast("Error sending request."); }
-};
-
-// ---------- TESTIMONIALS ----------
-allTestimonials = {
-  Waldorf: [
-    {name:"Emma R.", text:"Landlord responses were quick and helpful."},
-    {name:"Jason M.", text:"The site made it easy to compare rooms locally."},
-    {name:"Alice T.", text:"Found a room that fit my budget perfectly."},
-    {name:"Mark D.", text:"Easy to navigate and post my room as landlord."}
-  ],
-  LaPlata:[
-    {name:"Linda G.", text:"Very user-friendly experience."},
-    {name:"Peter V.", text:"I found my room within a week!"},
-    {name:"Sophie H.", text:"Great listings with clear details."},
-    {name:"Tom F.", text:"Smooth communication with landlords."}
-  ],
-  BryansRoad:[
-    {name:"Nancy B.", text:"Listings were accurate and easy to view."},
-    {name:"Kevin L.", text:"The landlord portal is simple to use."},
-    {name:"Derek C.", text:"Helpful support team for any questions."},
-    {name:"Olivia S.", text:"Room photos were clear and updated."}
-  ],
-  Accokeek:[
-    {name:"Rachel W.", text:"Great local community focus."},
-    {name:"Samuel H.", text:"I appreciated the detailed room info."},
-    {name:"Laura J.", text:"Found a nice, affordable room easily."},
-    {name:"Henry B.", text:"The site is very intuitive."}
-  ]
-};
-
-function showTestimonials(city){
-  const container = document.getElementById("testimonialContainer");
-  container.innerHTML="";
-  const list = allTestimonials[city] || [];
-  list.forEach(t=>{
-    const div = document.createElement("div");
-    div.className="testimonial-card";
-    div.innerHTML=`<strong>${t.name}</strong><p>${t.text}</p>`;
-    container.appendChild(div);
-  });
-}
-
-// ---------- FAQ ----------
-allFaqs=[
-  {q:"Can I edit my listing after publishing?",a:"Yes, log in and update your listing through the Landlord Portal."},
-  {q:"Are tenants screened?",a:"Currently, tenants submit requests; screening is done directly by landlords."},
-  {q:"Can I delete my account?",a:"Yes, contact support to remove your account and listings."},
-  {q:"How long are listings visible?",a:"Listings remain visible until the landlord removes them or marks them rented."},
-  {q:"Is there a fee to post a listing?",a:"No, posting a room is free for landlords."},
-  {q:"Can tenants contact multiple landlords?",a:"Yes, tenants can submit requests to multiple landlords."}
-];
-
-function renderFaqs(){
-  const container = document.getElementById("faqContainer");
-  container.innerHTML="";
-  allFaqs.forEach((f,idx)=>{
-    const div=document.createElement("div");
-    div.className="faq-item";
-    div.innerHTML=`<h4>${f.q}</h4><p>${f.a}</p>`;
-    div.onclick = function(){
-      const p = div.querySelector("p");
-      p.style.display = p.style.display==="block"?"none":"block";
-    }
-    container.appendChild(div);
-  });
-}
-
-// ---------- AUTH FORM ----------
-document.getElementById("loginForm").onsubmit = async function(e){
-  e.preventDefault();
-  const email = this.email.value;
-  const password = this.password.value;
-  try{
-    const { data, error } = await sb.auth.signInWithPassword({email,password});
-    if(error){
-      // Try signup if login fails
-      const { data:signupData, error:signupErr } = await sb.auth.signUp({email,password});
-      if(signupErr){ showToast("Auth failed: "+signupErr.message); return; }
-      setLoggedInUI(signupData.user);
-      showToast("Account created & logged in!");
-      return;
-    }
-    setLoggedInUI(data.user);
-    showToast("Logged in successfully!");
-  }catch(err){ console.error(err); showToast("Login error."); }
-};
-
-document.getElementById("logoutBtn").onclick = async ()=>{
-  await sb.auth.signOut();
-  setLoggedOutUI();
-  showToast("Logged out.");
-};
-
-// ---------- INIT ----------
-document.addEventListener("DOMContentLoaded",()=>{
-  checkSession();
-  loadListings();
-  renderFaqs();
+  const formData = new FormData(tenantFormEl);
+  const { data, error } = await sb.from("tenant_requests").insert([{
+    tenant_name: formData.get("tenant_name"),
+    tenant_email: formData.get("tenant_email"),
+    tenant_phone: formData.get("tenant_phone"),
+    desired_city: formData.get("desired_city"),
+    requirements: formData.get("requirements")
+  }]);
+  if(error){ showToast(error.message); return; }
+  showToast("Request sent successfully.");
+  tenantFormEl.reset();
 });
+
+// -------------------- LISTINGS --------------------
+async function loadListings(){
+  let { data: listings, error } = await sb.from("listings").select("*");
+  if(error){ showToast(error.message); return; }
+  const container = document.getElementById("availableListings");
+  const cityFilter = document.getElementById("filterCity").value;
+  const sort = document.getElementById("sortListings").value;
+  if(cityFilter!=="all") listings = listings.filter(l=>l.city===cityFilter);
+  if(sort==="price_low_high") listings.sort((a,b)=>a.price-b.price);
+  else if(sort==="price_high_low") listings.sort((a,b)=>b.price-a.price);
+  else listings.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+  document.getElementById("listingsCount").textContent = listings.length+" listings";
+  container.innerHTML="";
+  listings.forEach(l=>{
+    const card = document.createElement("div"); card.className="listing-card";
+    card.innerHTML=`<h3>${l.room_title}</h3>
+      <p>${l.city} - $${l.price}/month</p>
+      <p>${l.details}</p>
+      ${l.image_url?`<img src="${l.image_url}" alt="Room Image"/>`:''}`;
+    container.appendChild(card);
+  });
+}
+document.getElementById("filterCity").addEventListener("change", loadListings);
+document.getElementById("sortListings").addEventListener("change", loadListings);
+loadListings();
 </script>
 </body>
 </html>
